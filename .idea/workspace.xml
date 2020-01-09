@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/first" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/hw1/firstClone" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/hw1/localMain" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/hw1InteliJProject" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/hw2/meitar.bach-hw2" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/hw3/meitar.bach-hw3" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/hw4/meitar.bach-hw4" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/hw5/meitar.bach-hw5" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Classes/Class assignment/class05/testing" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Classes/Class assignment/class07/regex-crossword" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Classes/Class assignment/class11/tictactoe" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="1580" />
+    <option name="width" value="1635" />
+    <option name="height" value="1735" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1578570498696" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../שנה ב/סמסטר א/תכנות מתקדם/Assignments/hw1InteliJProject" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RunManager">
+    <configuration name="IdcDm" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="IdcDm" />
+      <module name="Computer_Networks_Lab_Exercise" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.IdcDm" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>9</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
