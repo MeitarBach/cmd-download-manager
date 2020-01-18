@@ -9,6 +9,10 @@ public class Chunk {
         this.offset = offset;
     }
 
+    public byte[] getData(){
+        return data;
+    }
+
     public int getSize(){
         return size;
     }
