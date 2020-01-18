@@ -64,4 +64,18 @@ public class ConnectionReader implements Runnable {
         return this.blocking_queue;
     }
 
+    public String getRange(){
+        return (this.range_start + " - " + (range_start+range_size-1));
+    }
+
+    @Override
+    public String toString(){
+        String result = "Connection reader details:";
+        result += "Range size:" + this.range_size;
+        result += ", Starting from:" + this.range_start;
+        result += ", Reader range:" + this.getRange() + ")";
+
+        return result;
+    }
+
 }
