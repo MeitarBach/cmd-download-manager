@@ -28,7 +28,7 @@ public class IdcDm {
         writer_worker.join();
         readers_pool.getReaderPool().shutdown();
 
-        File input_file = new File("C:\\Users\\Meitar\\Downloads\\test\\Mario1_500_src.avi");
+        File input_file = new File("test\\Mario1_500_src.avi");
         Utils.diff(input_file, output_file);
     }
 

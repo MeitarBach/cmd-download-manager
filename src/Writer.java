@@ -32,7 +32,7 @@ public class Writer implements Runnable{
             while ((chunk_to_write = blocking_queue.poll(TIME_OUT, TimeUnit.SECONDS)) != null){
                 rafi.seek(chunk_to_write.getOffset());
                 rafi.write(chunk_to_write.getData(), 0, chunk_to_write.getSize());
-                System.out.println("Sucssessfully wrote chunk:" + chunk_to_write);
+//                System.out.println("Sucssessfully wrote chunk:" + chunk_to_write);
             }
 
             System.out.println("Queue is Empty. Finished writing chunks from the queue");

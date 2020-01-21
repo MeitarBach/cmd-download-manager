@@ -31,13 +31,15 @@ public class Utils {
             connection =  (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("HEAD");
             connection.connect();
-            int i = 1; // the header at i=0 is null
+            int i = 0;
 
-            while(true){ // it is known that Content-Length must be a field
+            while(true){ // it is known that Content-Length must be a header
                 String header = connection.getHeaderFieldKey(i);
-                if (header.equals("Content-Length")){
-                    content_length = connection.getHeaderField(i);
-                    break;
+                if (header != null) {
+                    if (header.equals("Content-Length")) {
+                        content_length = connection.getHeaderField(i);
+                        break;
+                    }
                 }
                 i++;
             }
@@ -50,8 +52,8 @@ public class Utils {
     }
 
     /**
-     * A function which creates a desired number of ConnectionReader threads, assigning each of them
-     * except the last one a range of equal size to work on. The last thread gets the remaining bytes.
+     * A function which creates an array of desired number of ConnectionReader threads, assigning each of them
+     * except the last one a range of equal size to work on. The last thread gets the remaining bytes range.
      * @param connections_number number of threads to create.
      * @param content_length the size of the download file.
      * @param bq a blocking queue to which the threads put chunks.

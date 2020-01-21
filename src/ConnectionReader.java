@@ -6,7 +6,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class ConnectionReader implements Runnable {
 
-    private final int CHUNK_SIZE = 4096; // Maximum size of a chunk
+    private static final int CHUNK_SIZE = 4096; // Maximum size of a chunk
     private long range_start;
     private long range_size;
     private BlockingQueue<Chunk> blocking_queue;
@@ -27,7 +27,7 @@ public class ConnectionReader implements Runnable {
         // issue a range http get request for the resource specified in the url
         try {
             http_connection = (HttpURLConnection) download_url.openConnection();
-            http_connection.setRequestProperty("Range", "Bytes=" + range_start + "-" + (range_start+range_size-1));
+            http_connection.setRequestProperty("Range", "Bytes=" + range_start + "-" + lastByteInRange());
             http_connection.connect();
         } catch (IOException e) {
             System.err.println("There was a problem while opening a connection to the url:" + e.getMessage());
@@ -45,10 +45,19 @@ public class ConnectionReader implements Runnable {
                 byte[] read_buffer = new byte[CHUNK_SIZE];
                 bytes_read = input_stream.read(read_buffer);
                 if (bytes_read == -1) break; // stop at end of stream
+                // fill up buffer before creating a chunk
+                // skip if it is the last chunk in the range
+                if (offset + bytes_read - 1 < lastByteInRange()) {
+                    while (CHUNK_SIZE - bytes_read > 0) {
+                        bytes_read += input_stream.read(read_buffer, bytes_read, CHUNK_SIZE - bytes_read);
+                    }
+                }
                 // create a chunk of size equal to the amount of bytes successfully read
                 // initialize the chunk's offset to be the offset in the file where this chunk starts
                 Chunk data_chunk = new Chunk(read_buffer, bytes_read, offset);
                 blocking_queue.put(data_chunk);
+                if (data_chunk.getSize() != CHUNK_SIZE)
+                    System.out.println(data_chunk);
                 offset += bytes_read;
             }
         } catch (IOException e){
@@ -65,7 +74,15 @@ public class ConnectionReader implements Runnable {
     }
 
     public String getRange(){
-        return (this.range_start + " - " + (range_start+range_size-1));
+        return (this.range_start + " - " + lastByteInRange());
+    }
+
+    public long lastByteInRange(){
+        return range_start+range_size - 1;
+    }
+
+    public static int getChunkSize(){
+        return CHUNK_SIZE;
     }
 
     @Override
