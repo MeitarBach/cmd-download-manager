@@ -113,6 +113,20 @@ public class Utils {
         }
     }
 
+    public static void printArr(boolean[] arr){
+        for (boolean b : arr){
+            System.out.println(b);
+        }
+    }
+
+    public static void resetBooleanArr(boolean[] arr){
+        for(boolean b : arr)
+            if(!b) return; // no need to reset
+        for(int i = 0 ; i < arr.length ; i++)
+            arr[i] = false;
+
+    }
+
 
 
 

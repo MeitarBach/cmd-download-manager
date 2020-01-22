@@ -15,20 +15,61 @@ public class ConnectionsManager {
      * @return an array of ConnectionReader threads
      */
     public static ConnectionReader[] createConnectionReaders(int connections_number, long content_length,
-                                                             BlockingQueue<Chunk> bq, URL url){
+                                                              BlockingQueue<Chunk> bq, URL url){
         ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
         // check if the file's size is evenly divisible for the desired amount of threads, and act accordingly
         long reader_range_size = content_length % connections_number == 0 ?
                 content_length / connections_number : content_length / connections_number+1;
         // Make the range size divisible by CHUNK_SIZE
         reader_range_size += ConnectionReader.getChunkSize() -
-                            (reader_range_size % ConnectionReader.getChunkSize());
+                (reader_range_size % ConnectionReader.getChunkSize());
         long cur_range_start = 0;
         for(int i = 0 ; i < readers_pool.length ; i++){
             if (i != readers_pool.length - 1) // every thread except the last one
                 readers_pool[i] = new ConnectionReader(cur_range_start, reader_range_size, bq, url);
             else // last thread
                 readers_pool[i] = new ConnectionReader(cur_range_start, content_length, bq, url);
+            content_length -= reader_range_size; // keep track of last thread range size
+            cur_range_start += reader_range_size;
+        }
+
+        return readers_pool;
+    }
+
+    public static ConnectionReader[] createConnectionReaders(int connections_number, long content_length,
+                                                             BlockingQueue<Chunk> bq, URL[] urls){
+        ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
+        boolean[] usedUrls = new boolean[urls.length];
+
+        // limit the number of connections to 3 * (available number of servers)
+        // This makes sure that each server opens a maximum of 3 connections
+        connections_number = connections_number < (3 * urls.length) ? connections_number : (3 * urls.length);
+
+        // check if the file's size is evenly divisible for the desired amount of threads, and act accordingly
+        long reader_range_size = content_length % connections_number == 0 ?
+                content_length / connections_number : content_length / connections_number+1;
+        // Make the range size divisible by CHUNK_SIZE
+        reader_range_size += ConnectionReader.getChunkSize() -
+                (reader_range_size % ConnectionReader.getChunkSize());
+        long cur_range_start = 0;
+        for(int i = 0 ; i < readers_pool.length ; i++){
+            // reset usedUrls only when all Urls are used in this round
+            Utils.resetBooleanArr(usedUrls);
+
+            // pick a random URL from the list which is not used in this round yet
+            int randUrlNumber = (int)(Math.random() * urls.length);
+            while(usedUrls[randUrlNumber]){
+                randUrlNumber = (int)(Math.random() * urls.length);
+            }
+            usedUrls[randUrlNumber] = true;
+
+            if (i != readers_pool.length - 1) // every thread except the last one
+                readers_pool[i] = new ConnectionReader(cur_range_start, reader_range_size,
+                                                        bq, urls[randUrlNumber]);
+            else // last thread
+                readers_pool[i] = new ConnectionReader(cur_range_start, content_length,
+                                                        bq, urls[randUrlNumber]);
+
             content_length -= reader_range_size; // keep track of last thread range size
             cur_range_start += reader_range_size;
         }
