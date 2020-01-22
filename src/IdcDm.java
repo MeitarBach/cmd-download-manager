@@ -1,5 +1,4 @@
 import java.io.File;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -8,12 +7,19 @@ public class IdcDm {
         URL url = new URL("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
         long content_length = Utils.getContentLength(url);
         LinkedBlockingQueue<Chunk> bq = new LinkedBlockingQueue<>();
-        ConnectionReader[] readers = Utils.createConnectionReaders(3, content_length, bq, url);
+        ConnectionReader[] readers = ConnectionsManager
+                .createConnectionReaders(3, content_length, bq, url);
         ConnectionsManager readers_pool = new ConnectionsManager(readers);
         readers_pool.execute();
 
         String file_name = Utils.getFileName(url);
         System.out.println("File Name: " + file_name);
+
+        // getUrls test
+        URL[] urls = Utils.getUrls("test\\CentOS-6.10-x86_64-netinstall.iso.list");
+        Utils.printArr(urls);
+
+
         File output_file = new File(file_name);
 
         if(output_file.createNewFile()){

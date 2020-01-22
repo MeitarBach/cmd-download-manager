@@ -1,9 +1,11 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.BlockingQueue;
+import java.util.LinkedList;
 
 public class Utils {
 
@@ -17,6 +19,18 @@ public class Utils {
         String file_name = file_path[file_path.length-1];
 
         return file_name;
+    }
+
+    /**
+     * A function which gets a file and returns its extension
+     * @param file A file to get extension of
+     * @return The file's extension
+     */
+    public static String getFileExtension(String file){
+        String[] file_path = file.split("\\.");
+        String file_extension = file_path[file_path.length-1];
+
+        return file_extension;
     }
 
     /**
@@ -52,32 +66,54 @@ public class Utils {
     }
 
     /**
-     * A function which creates an array of desired number of ConnectionReader threads, assigning each of them
-     * except the last one a range of equal size to work on. The last thread gets the remaining bytes range.
-     * @param connections_number number of threads to create.
-     * @param content_length the size of the download file.
-     * @param bq a blocking queue to which the threads put chunks.
-     * @param url a url to get the file from
-     * @return an array of ConnectionReader threads
+     * A function which gets a URL string or a path to a file containing a list of URLs
+     * and returns an array of urls
+     * @param file a Url string or a File path string
+     * @return an array containing a URL in the first case and an array of URLs in the second
      */
-    public static ConnectionReader[] createConnectionReaders(int connections_number, long content_length,
-                                                              BlockingQueue<Chunk> bq, URL url){
-        ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
-        // check if the file's size is evenly divisible for the desired amount of threads, and act accordingly
-        long reader_range_size = content_length % connections_number == 0 ?
-                content_length / connections_number : content_length / connections_number+1;
-        long cur_range_start = 0;
-        for(int i = 0 ; i < readers_pool.length ; i++){
-            if (i != readers_pool.length - 1) // every thread except the last one
-                readers_pool[i] = new ConnectionReader(cur_range_start, reader_range_size, bq, url);
-            else // last thread
-                readers_pool[i] = new ConnectionReader(cur_range_start, content_length, bq, url);
-            content_length -= reader_range_size; // keep track of last thread range size
-            cur_range_start += reader_range_size;
+    public static URL[] getUrls(String file){
+        URL[] result = new URL[1];
+        LinkedList<URL> urls = new LinkedList<>();
+
+        // The argument is a single URL
+        if (!Utils.getFileExtension(file).equals("list")){
+            try {
+                result[0] = new URL(file);
+                return result;
+            } catch (MalformedURLException e){
+                System.err.println("You entered an invalid URL: " + e);
+            }
         }
 
-        return readers_pool;
+        // The argument is a list of URLs
+        else {
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new FileReader(file));
+            } catch (IOException e) {
+                System.err.println("There was a problem opening the URLs file for reading: " + e);
+            }
+
+            String curUrl = "";
+            try {
+                while ((curUrl = br.readLine()) != null) {
+                    urls.add(new URL(curUrl));
+                }
+            } catch (IOException e) {
+                System.err.println("There was a problem while reading URLs from the file: " + e);
+            }
+        }
+
+        return urls.toArray(result);
     }
+
+    public static <E> void printArr(E[] arr){
+        for (E e : arr){
+            System.out.println(e);
+        }
+    }
+
+
 
 
     /**

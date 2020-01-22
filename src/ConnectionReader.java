@@ -21,7 +21,8 @@ public class ConnectionReader implements Runnable {
     }
 
     public void run(){
-
+        System.out.println("Start downloading range (" + getRange() + ") " +
+                "from:\n" + download_url);
         HttpURLConnection http_connection = null;
 
         // issue a range http get request for the resource specified in the url
