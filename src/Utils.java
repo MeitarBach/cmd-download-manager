@@ -14,7 +14,14 @@ public class Utils {
      * @param url A string representing the url
      * @return The file's name
      */
-    public static String getFileName(URL url){
+    public static String getFileName(String file){
+        URL url = null;
+        try{
+            url = new URL(file);
+        } catch (MalformedURLException e){
+            System.err.println("Couldn't get file name: " + e);
+        }
+
         String[] file_path = url.getFile().split("/");
         String file_name = file_path[file_path.length-1];
 
@@ -35,13 +42,15 @@ public class Utils {
 
     /**
      * A function for getting the length of a file specified in a url
-     * @param url A url of a file
+     * @param file A url of a file
      * @return The length of the file
      */
-    public static long getContentLength(URL url){
+    public static long getContentLength(String file){
         String content_length = "";
+        URL url = null;
         HttpURLConnection connection = null;
         try{
+            url = new URL(file);
             connection =  (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("HEAD");
             connection.connect();

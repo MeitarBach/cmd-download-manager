@@ -36,7 +36,7 @@ public class ConnectionsManager {
         return readers_pool;
     }
 
-    public static ConnectionReader[] createConnectionReaders(int connections_number, long content_length,
+    public ConnectionReader[] createConnectionReaders(int connections_number, long content_length,
                                                              BlockingQueue<Chunk> bq, URL[] urls){
         ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
         boolean[] usedUrls = new boolean[urls.length];
@@ -78,9 +78,10 @@ public class ConnectionsManager {
     }
 
 
-    public ConnectionsManager(ConnectionReader[] connection_readers){
+    public ConnectionsManager(int connections_number, long content_length,
+                              BlockingQueue<Chunk> bq, URL[] urls){
+        this.connection_readers = createConnectionReaders(connections_number, content_length, bq, urls);
         this.readers_pool = Executors.newFixedThreadPool(connection_readers.length);
-        this.connection_readers = connection_readers;
     }
 
     public void execute(){
