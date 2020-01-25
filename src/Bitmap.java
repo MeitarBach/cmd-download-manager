@@ -5,6 +5,7 @@ public class Bitmap extends Thread implements Serializable{
     private String file_name;
     private int chunks_wrote;
     private int percentage;
+    private boolean finished;
 
 
     public Bitmap(String file_url){
@@ -21,6 +22,12 @@ public class Bitmap extends Thread implements Serializable{
 
         this.percentage = 0;
 
+        this.finished = false;
+
+    }
+
+    public boolean[] getBitmapArray(){
+        return this.bitmap;
     }
 
     public String getFileName (){
@@ -35,6 +42,10 @@ public class Bitmap extends Thread implements Serializable{
         return this.percentage;
     }
 
+    public boolean isFinished(){
+        return this.finished;
+    }
+
     public void setPercentage(int percentage){
         this.percentage = percentage;
     }
@@ -45,6 +56,8 @@ public class Bitmap extends Thread implements Serializable{
         int cur_percentage = (int) (((double)chunks_wrote / bitmap.length) * 100);
         if (cur_percentage > this.percentage)
             this.percentage = cur_percentage;
+        if (this.percentage == 100)
+            this.finished = true;
     }
 
     /**

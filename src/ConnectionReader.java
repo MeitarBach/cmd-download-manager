@@ -9,13 +9,15 @@ public class ConnectionReader implements Runnable {
     private long range_size;
     private BlockingQueue<Chunk> blocking_queue;
     private URL download_url;
+    private Bitmap bitmap;
 
     public ConnectionReader(long range_start, long range_size, BlockingQueue<Chunk> blocking_queue,
-                            URL download_url){
+                            URL download_url, Bitmap bitmap){
         this.range_start = range_start;
         this.range_size = range_size;
         this.blocking_queue = blocking_queue;
         this.download_url = download_url;
+        this.bitmap = bitmap;
     }
 
     public void run(){
@@ -29,8 +31,7 @@ public class ConnectionReader implements Runnable {
             http_connection.setRequestProperty("Range", "Bytes=" + range_start + "-" + lastByteInRange());
             http_connection.connect();
         } catch (IOException e) {
-            System.err.println("There was a problem while opening a connection to the url:" + e.getMessage());
-            System.err.println("Download Failed");
+            System.err.println("There was a problem while opening a connection to the url: " + e);
         }
 
         // read chunks of data from the connection and put them into the queue
@@ -41,9 +42,28 @@ public class ConnectionReader implements Runnable {
             int bytes_read = 0;
             long offset = range_start;
             while(bytes_read != -1){
+
+                // Skip all chunks that were already written to the output file
+                boolean[] bitmap_arr = bitmap.getBitmapArray();
+                int i = (int)(offset / Chunk.getChunkSize());
+                int bytes_to_skip = 0;
+                while(i < bitmap_arr.length && bitmap_arr[i++]){
+                    bytes_to_skip += Chunk.getChunkSize();
+                }
+
+                int skipped = 0;
+                while(bytes_to_skip - skipped > 0){
+                    skipped += input_stream.skip(bytes_to_skip - skipped);
+                    offset += skipped;
+                    if (offset > lastByteInRange()) // no more bytes to read in this range
+                        return;
+                }
+
+
                 byte[] read_buffer = new byte[Chunk.getChunkSize()];
                 bytes_read = input_stream.read(read_buffer);
                 if (bytes_read == -1) break; // stop at end of stream
+
                 // fill up buffer before creating a chunk
                 // skip if it is the last chunk in the range
                 if (offset + bytes_read - 1 < lastByteInRange()) {
@@ -60,10 +80,12 @@ public class ConnectionReader implements Runnable {
                 offset += bytes_read;
             }
         } catch (IOException e){
-            System.err.println("There was a problem while reading the data: " + e.getMessage());
+            System.err.println("There was a problem while reading the data: " + e);
         } catch (InterruptedException e){
-            System.err.println("There was a problem while writing a chunk into the queue: " + e.getMessage());
+            System.err.println("There was a problem while writing a chunk into the queue: " + e);
         }
+
+        System.out.println("Finished downloading");
     }
 
     public BlockingQueue<Chunk> getBlockingQueue(){

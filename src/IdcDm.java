@@ -1,53 +1,59 @@
 import java.io.File;
 import java.net.URL;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class IdcDm {
     public static void main(String[] args) throws Exception{
-        // TESTS
+
+        /******  TESTS  ******/
+
 //        getUrlsTest();
 //        booleanResetTest();
-
 //        testBitmapCreation("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
 //        testBitmapSetPercentage("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
 //        testBitmapDesirialization("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
 
 
         // Main Program Logic
-        URL[] urls = Utils.getUrls("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+        if(args.length > 2 || args.length < 1){
+            System.out.println("usage:\n\t\tjava IdcDm URL|URL-LIST-FILE [MAX-CONCURRENT-CONNECTIONS]");
+            return;
+        }
+
+
+        URL[] urls = Utils.getUrls(args[0]);
         long content_length = Utils.getContentLength(urls[0].toString());
 
+        Bitmap bitmap = Bitmap.getBitmap(urls[0].toString());
+
         LinkedBlockingQueue<Chunk> bq = new LinkedBlockingQueue<>();
+
+        int connections_number = args.length > 1 ? Integer.parseInt(args[1]) : 1;
+
         ConnectionsManager readers_pool =
-                new ConnectionsManager(3, content_length, bq, urls);
+                new ConnectionsManager(connections_number, content_length, bq, urls, bitmap);
+
         readers_pool.execute();
+        readers_pool.getReaderPool().shutdown();
 
         String file_name = Utils.getFileName(urls[0].toString());
         System.out.println("\nDownloading: " + file_name);
 
         File output_file = new File(file_name);
-
-        if(output_file.createNewFile()){
-            System.out.println("created file\n");
-        } else {
-            System.out.println("file exists\n");
-        }
-
-        Bitmap bitmap = Bitmap.getBitmap("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+        output_file.createNewFile();
 
         Thread writer_worker = new Thread(new Writer(bq, output_file, bitmap));
         writer_worker.start();
 
+        readers_pool.getReaderPool().awaitTermination(30, TimeUnit.SECONDS);
         writer_worker.join();
 
-        readers_pool.getReaderPool().shutdown();
         bitmap.deleteBitmap();
 
-
-        // Check for difference between files
-//        File input_file = new File("test\\Mario1_500_src.avi");
-//        Utils.diff(input_file, output_file);
     }
+
+
 
 
 

@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class Writer implements Runnable{
-    private final long TIME_OUT = 5; // Maximum waiting time in seconds for a chunk to become available in the queue
+    private final long TIME_OUT = 2; // Maximum waiting time in minutes for a chunk to become available in the queue
     private BlockingQueue<Chunk> blocking_queue;
     private File output_file;
     private Bitmap bitmap;
@@ -30,8 +30,13 @@ public class Writer implements Runnable{
         // Take chunks from the queue and write them to the correct location in the file
         try {
             Chunk chunk_to_write = null;
+            boolean first_chunk = true;
             // wait TIME_OUT seconds for a chunk to become available in the queue
-            while ((chunk_to_write = blocking_queue.poll(TIME_OUT, TimeUnit.SECONDS)) != null){
+            while ((chunk_to_write = blocking_queue.poll(TIME_OUT, TimeUnit.MINUTES)) != null){
+                if (first_chunk){
+                    System.out.println("Downloaded " + bitmap.getPercentage() + "%");
+                    first_chunk = false;
+                }
                 rafi.seek(chunk_to_write.getOffset());
                 rafi.write(chunk_to_write.getData(), 0, chunk_to_write.getSize());
                 int previous_percentage = bitmap.getPercentage();
@@ -40,6 +45,10 @@ public class Writer implements Runnable{
                 if (cur_percentage > previous_percentage){
                     if(bitmap.serialize()){
                         System.out.println("Downloaded " + bitmap.getPercentage() + "%");
+                        if(bitmap.isFinished()) { // download is finished - don't wait for more chunks
+                            System.out.println("Download succeeded");
+                            break;
+                        }
                     }
                 }
             }

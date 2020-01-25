@@ -11,39 +11,18 @@ public class ConnectionsManager {
      * @param connections_number number of threads to create.
      * @param content_length the size of the download file.
      * @param bq a blocking queue to which the threads put chunks.
-     * @param url a url to get the file from
+     * @param urls an array of urls to get the file from
      * @return an array of ConnectionReader threads
      */
-    public static ConnectionReader[] createConnectionReaders(int connections_number, long content_length,
-                                                              BlockingQueue<Chunk> bq, URL url){
-        ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
-        // check if the file's size is evenly divisible for the desired amount of threads, and act accordingly
-        long reader_range_size = content_length % connections_number == 0 ?
-                content_length / connections_number : content_length / connections_number+1;
-        // Make the range size divisible by CHUNK_SIZE
-        reader_range_size += Chunk.getChunkSize() -
-                (reader_range_size % Chunk.getChunkSize());
-        long cur_range_start = 0;
-        for(int i = 0 ; i < readers_pool.length ; i++){
-            if (i != readers_pool.length - 1) // every thread except the last one
-                readers_pool[i] = new ConnectionReader(cur_range_start, reader_range_size, bq, url);
-            else // last thread
-                readers_pool[i] = new ConnectionReader(cur_range_start, content_length, bq, url);
-            content_length -= reader_range_size; // keep track of last thread range size
-            cur_range_start += reader_range_size;
-        }
-
-        return readers_pool;
-    }
-
     public ConnectionReader[] createConnectionReaders(int connections_number, long content_length,
-                                                             BlockingQueue<Chunk> bq, URL[] urls){
-        ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
-        boolean[] usedUrls = new boolean[urls.length];
+                                                             BlockingQueue<Chunk> bq, URL[] urls, Bitmap bitmap){
 
         // limit the number of connections to 3 * (available number of servers)
         // This makes sure that each server opens a maximum of 3 connections
         connections_number = connections_number < (3 * urls.length) ? connections_number : (3 * urls.length);
+
+        ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
+        boolean[] usedUrls = new boolean[urls.length];
 
         // check if the file's size is evenly divisible for the desired amount of threads, and act accordingly
         long reader_range_size = content_length % connections_number == 0 ?
@@ -65,10 +44,10 @@ public class ConnectionsManager {
 
             if (i != readers_pool.length - 1) // every thread except the last one
                 readers_pool[i] = new ConnectionReader(cur_range_start, reader_range_size,
-                                                        bq, urls[randUrlNumber]);
+                                                        bq, urls[randUrlNumber], bitmap);
             else // last thread
                 readers_pool[i] = new ConnectionReader(cur_range_start, content_length,
-                                                        bq, urls[randUrlNumber]);
+                                                        bq, urls[randUrlNumber], bitmap);
 
             content_length -= reader_range_size; // keep track of last thread range size
             cur_range_start += reader_range_size;
@@ -79,8 +58,8 @@ public class ConnectionsManager {
 
 
     public ConnectionsManager(int connections_number, long content_length,
-                              BlockingQueue<Chunk> bq, URL[] urls){
-        this.connection_readers = createConnectionReaders(connections_number, content_length, bq, urls);
+                              BlockingQueue<Chunk> bq, URL[] urls, Bitmap bitmap){
+        this.connection_readers = createConnectionReaders(connections_number, content_length, bq, urls, bitmap);
         this.readers_pool = Executors.newFixedThreadPool(connection_readers.length);
     }
 
