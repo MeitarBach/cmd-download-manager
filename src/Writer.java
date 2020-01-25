@@ -8,11 +8,13 @@ public class Writer implements Runnable{
     private final long TIME_OUT = 5; // Maximum waiting time in seconds for a chunk to become available in the queue
     private BlockingQueue<Chunk> blocking_queue;
     private File output_file;
+    private Bitmap bitmap;
 
 
-    public Writer(BlockingQueue<Chunk> blocking_queue, File output_file){
+    public Writer(BlockingQueue<Chunk> blocking_queue, File output_file, Bitmap bitmap){
         this.blocking_queue = blocking_queue;
         this.output_file = output_file;
+        this.bitmap = bitmap;
     }
 
     @Override
@@ -32,10 +34,16 @@ public class Writer implements Runnable{
             while ((chunk_to_write = blocking_queue.poll(TIME_OUT, TimeUnit.SECONDS)) != null){
                 rafi.seek(chunk_to_write.getOffset());
                 rafi.write(chunk_to_write.getData(), 0, chunk_to_write.getSize());
-//                System.out.println("Sucssessfully wrote chunk:" + chunk_to_write);
+                int previous_percentage = bitmap.getPercentage();
+                bitmap.update(chunk_to_write.getChunkId());
+                int cur_percentage = bitmap.getPercentage();
+                if (cur_percentage > previous_percentage){
+                    if(bitmap.serialize()){
+                        System.out.println("Downloaded " + bitmap.getPercentage() + "%");
+                    }
+                }
             }
 
-            System.out.println("Queue is Empty. Finished writing chunks from the queue");
             rafi.close();
 
         } catch (IOException e){

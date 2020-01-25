@@ -3,36 +3,23 @@ import java.io.*;
 public class Bitmap extends Thread implements Serializable{
     private boolean[] bitmap;
     private String file_name;
+    private int chunks_wrote;
     private int percentage;
-    private ObjectOutputStream output_stream;
 
 
-    public Bitmap(String file){
-        long content_length = Utils.getContentLength(file);
-        int chunks_number = (int) (content_length / ConnectionReader.getChunkSize());
-        // add one chunk if content-length isn't divisible by CHUNK_SIZE
-        if (!(content_length % ConnectionReader.getChunkSize() == 0))
+    public Bitmap(String file_url){
+        long content_length = Utils.getContentLength(file_url);
+        int chunks_number = (int) (content_length / Chunk.getChunkSize());
+        // add last chunk if content-length isn't divisible by CHUNK_SIZE
+        if (!(content_length % Chunk.getChunkSize() == 0))
             chunks_number++;
         this.bitmap = new boolean[chunks_number];
 
-        this.file_name = Utils.getFileName(file) + ".tmp";
-        File newFile = new File(file_name);
-        try {
-            newFile.createNewFile();
-            System.out.println("Created bitmap file");
-        } catch (IOException e){
-            System.err.println("Couldn't create the bitmap file: " + e);
-        }
+        this.file_name = Utils.getFileName(file_url) + ".tmp";
 
+        this.chunks_wrote = 0;
 
         this.percentage = 0;
-
-        try {
-            this.output_stream = new ObjectOutputStream(new FileOutputStream(file_name));
-            System.out.println("Successfully wrote Bitmap to Disk");
-        } catch (IOException e){
-            System.err.println("Couldn't create bitmap: " + e);
-        }
 
     }
 
@@ -48,6 +35,82 @@ public class Bitmap extends Thread implements Serializable{
         return this.percentage;
     }
 
+    public void setPercentage(int percentage){
+        this.percentage = percentage;
+    }
+
+    public void update(int chunk_id){
+        this.bitmap[chunk_id] = true;
+        this.chunks_wrote++;
+        int cur_percentage = (int) (((double)chunks_wrote / bitmap.length) * 100);
+        if (cur_percentage > this.percentage)
+            this.percentage = cur_percentage;
+    }
+
+    /**
+     * A function which serializes the bitmap to disk
+     * @return true if serialization is successful, false otherwise
+     */
+    public boolean serialize(){
+        try {
+            // write a temporary copy of the bitmap to the disk
+            File temp_bitmap = new File(file_name + "1");
+            ObjectOutputStream output_stream = new ObjectOutputStream(new FileOutputStream(temp_bitmap));
+            output_stream.writeObject(this);
+            output_stream.close();
+
+            // rename the temp copy of the bitmap to the permanent name
+            File permanent_bitmap = new File(file_name);
+            if(permanent_bitmap.exists()) {
+                permanent_bitmap.delete();
+            }
+            if(!temp_bitmap.renameTo(permanent_bitmap))
+                System.out.println("Couldn't rename bitmap");
+        } catch (IOException e){
+            System.err.println("Couldn't serialize bitmap: " + e);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Deserialize a bitmap off of the disk
+     * @param file_path the path of the bitmap to deserialize
+     * @return The deserialized bitmap
+     */
+    public static Bitmap deserialize(String file_path){
+        Bitmap bitmap = null;
+        try {
+            ObjectInputStream input_stream = new ObjectInputStream(new FileInputStream(file_path));
+            bitmap = (Bitmap) input_stream.readObject();
+            input_stream.close();
+        } catch (Exception e){
+            System.err.println("There was a problem while deserializing the bitmap: " + e);
+        }
+
+        return bitmap;
+    }
+
+    /**
+     * A function for creating/getting the bitmap when the download starts/resumes
+     * @param file_url the file to create/get bitmap for/of
+     * @return A bitmap of the file
+     */
+    public static Bitmap getBitmap(String file_url){
+        String file_name = Utils.getFileName(file_url) + ".tmp";
+        File bitmap = new File(file_name);
+        if(bitmap.exists())
+            return deserialize(file_name);
+        else
+            return new Bitmap(file_url);
+    }
+
+    public void deleteBitmap(){
+        File bitmap = new File(this.file_name);
+        bitmap.delete();
+    }
+
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
@@ -60,11 +123,6 @@ public class Bitmap extends Thread implements Serializable{
 
     @Override
     public void run() {
-        try {
-            output_stream.writeObject(this);
-            System.out.println("Successfully serialized Bitmap");
-        } catch (IOException e){
-            System.err.println("There was a problem while serializing the Bitmap: " + e);
-        }
+        serialize();
     }
 }

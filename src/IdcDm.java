@@ -5,18 +5,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class IdcDm {
     public static void main(String[] args) throws Exception{
         // TESTS
-        //getUrlsTest();
-        testBitmapCreation("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+//        getUrlsTest();
 //        booleanResetTest();
+
+//        testBitmapCreation("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+//        testBitmapSetPercentage("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+//        testBitmapDesirialization("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
 
 
         // Main Program Logic
-        URL[] urls = Utils.getUrls("test\\CentOS-6.10-x86_64-netinstall.iso.list");
+        URL[] urls = Utils.getUrls("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
         long content_length = Utils.getContentLength(urls[0].toString());
 
         LinkedBlockingQueue<Chunk> bq = new LinkedBlockingQueue<>();
         ConnectionsManager readers_pool =
-                new ConnectionsManager(12, content_length, bq, urls);
+                new ConnectionsManager(3, content_length, bq, urls);
         readers_pool.execute();
 
         String file_name = Utils.getFileName(urls[0].toString());
@@ -30,11 +33,15 @@ public class IdcDm {
             System.out.println("file exists\n");
         }
 
-        Thread writer_worker = new Thread(new Writer(bq,output_file));
+        Bitmap bitmap = Bitmap.getBitmap("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+
+        Thread writer_worker = new Thread(new Writer(bq, output_file, bitmap));
         writer_worker.start();
 
         writer_worker.join();
+
         readers_pool.getReaderPool().shutdown();
+        bitmap.deleteBitmap();
 
 
         // Check for difference between files
@@ -70,21 +77,28 @@ public class IdcDm {
     }
 
     // Bitmap creation and serialization test
-    public static void testBitmapCreation(String file){
-        Bitmap bitmap = new Bitmap(file);
-        System.out.println(bitmap);
+    public static void testBitmapCreation(String file_url){
+        Bitmap bitmap = Bitmap.getBitmap(file_url);
+        System.out.println("The bitmap before we update:\n" + bitmap + "\n");
+
+        System.out.println(bitmap.serialize());
 
         Runtime runtime = Runtime.getRuntime();
         runtime.addShutdownHook(bitmap);
 
-        System.out.println("Sleeping...");
+    }
 
-        try{
-            Thread.sleep(50000);
-        } catch (InterruptedException e){
-            System.err.println("There was a problem while testing bitmap " + e);
-        }
 
+    public static void testBitmapSetPercentage(String file_url){
+        Bitmap bitmap = Bitmap.getBitmap(file_url);
+        bitmap.setPercentage(25);
+        bitmap.serialize();
+        System.out.println("We updated the bitmap");
+    }
+
+    public static void testBitmapDesirialization(String file_url){
+        Bitmap bitmap = Bitmap.getBitmap(file_url);
+        System.out.println("The bitmap after we update:\n" + bitmap);
     }
 
 

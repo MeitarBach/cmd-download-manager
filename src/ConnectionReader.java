@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionReader implements Runnable {
-
-    private static final int CHUNK_SIZE = 4096; // Maximum size of a chunk
     private long range_start;
     private long range_size;
     private BlockingQueue<Chunk> blocking_queue;
@@ -43,30 +41,28 @@ public class ConnectionReader implements Runnable {
             int bytes_read = 0;
             long offset = range_start;
             while(bytes_read != -1){
-                byte[] read_buffer = new byte[CHUNK_SIZE];
+                byte[] read_buffer = new byte[Chunk.getChunkSize()];
                 bytes_read = input_stream.read(read_buffer);
                 if (bytes_read == -1) break; // stop at end of stream
                 // fill up buffer before creating a chunk
                 // skip if it is the last chunk in the range
                 if (offset + bytes_read - 1 < lastByteInRange()) {
-                    while (CHUNK_SIZE - bytes_read > 0) {
-                        bytes_read += input_stream.read(read_buffer, bytes_read, CHUNK_SIZE - bytes_read);
+                    while (Chunk.getChunkSize() - bytes_read > 0) {
+                        bytes_read += input_stream.read(read_buffer, bytes_read, Chunk.getChunkSize() - bytes_read);
                     }
                 }
                 // create a chunk of size equal to the amount of bytes successfully read
                 // initialize the chunk's offset to be the offset in the file where this chunk starts
                 Chunk data_chunk = new Chunk(read_buffer, bytes_read, offset);
                 blocking_queue.put(data_chunk);
-                if (data_chunk.getSize() != CHUNK_SIZE)
-                    System.out.println(data_chunk);
+//                if (data_chunk.getSize() != Chunk.getChunkSize())
+//                    System.out.println(data_chunk);
                 offset += bytes_read;
             }
         } catch (IOException e){
             System.err.println("There was a problem while reading the data: " + e.getMessage());
-            System.err.println("Download Failed");
         } catch (InterruptedException e){
             System.err.println("There was a problem while writing a chunk into the queue: " + e.getMessage());
-            System.err.println("Download Failed");
         }
     }
 
@@ -80,10 +76,6 @@ public class ConnectionReader implements Runnable {
 
     public long lastByteInRange(){
         return range_start+range_size - 1;
-    }
-
-    public static int getChunkSize(){
-        return CHUNK_SIZE;
     }
 
     @Override

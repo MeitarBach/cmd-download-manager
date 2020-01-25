@@ -11,7 +11,7 @@ public class Utils {
 
     /**
      * A function for extracting the file name from a url String
-     * @param url A string representing the url
+     * @param file A string representing the url
      * @return The file's name
      */
     public static String getFileName(String file){
@@ -85,17 +85,12 @@ public class Utils {
         LinkedList<URL> urls = new LinkedList<>();
 
         // The argument is a single URL
-        if (!Utils.getFileExtension(file).equals("list")){
             try {
                 result[0] = new URL(file);
                 return result;
-            } catch (MalformedURLException e){
-                System.err.println("You entered an invalid URL: " + e);
-            }
-        }
+            } catch (MalformedURLException e){ }
 
         // The argument is a list of URLs
-        else {
             BufferedReader br = null;
             try {
                 br = new BufferedReader(new FileReader(file));
@@ -111,7 +106,6 @@ public class Utils {
             } catch (IOException e) {
                 System.err.println("There was a problem while reading URLs from the file: " + e);
             }
-        }
 
         return urls.toArray(result);
     }

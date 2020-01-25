@@ -2,13 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="219a8916-9bbb-47a7-822b-f506639acb41" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Bitmap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Meitar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Meitar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Mario1_500.avi.tmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/Bitmap.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/Bitmap.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/Chunk.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/Chunk.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/ConnectionReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/ConnectionReader.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/ConnectionsManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/ConnectionsManager.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/IdcDm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/IdcDm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/Utils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/Writer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Computer_Networks_Lab_Exercise/Writer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Bitmap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bitmap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Chunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Chunk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ConnectionReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ConnectionReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ConnectionsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ConnectionsManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/IdcDm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IdcDm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Writer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Writer.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,15 +31,16 @@
     <session id="1603292722">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.12" value="2" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.17" value="1" />
-          <entry key="project.open.time.19" value="1" />
+          <entry key="project.open.time.19" value="2" />
+          <entry key="project.open.time.22" value="1" />
           <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.opened" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -44,12 +55,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="14092" />
+          <entry key="java" value="17351" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="14092" />
+          <entry key="JAVA" value="17351" />
         </counts>
       </usages-collector>
     </session>
@@ -59,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/IdcDm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+            <state relative-caret-position="136">
+              <caret line="35" column="111" selection-start-line="35" selection-start-column="111" selection-end-line="35" selection-end-column="111" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -71,8 +82,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ConnectionsManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="684">
-              <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
+            <state relative-caret-position="1598">
+              <caret line="96" selection-start-line="96" selection-end-line="96" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -83,8 +94,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="28" selection-end-column="5" />
+            <state relative-caret-position="-216">
+              <caret line="88" column="39" selection-start-line="88" selection-start-column="39" selection-end-line="88" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;method#diff#0;class#Utils#0" />
@@ -93,11 +104,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ConnectionReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-748">
-              <caret line="24" column="42" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
+            <state relative-caret-position="68">
+              <caret line="58" column="53" selection-start-line="58" selection-start-column="53" selection-end-line="58" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -108,9 +119,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Chunk.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="56">
+              <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
               <folding>
+                <element signature="e#478#479#0" expanded="true" />
+                <element signature="e#511#512#0" expanded="true" />
+                <element signature="e#529#530#0" expanded="true" />
+                <element signature="e#560#561#0" expanded="true" />
                 <element signature="e#474#475#0" expanded="true" />
                 <element signature="e#531#532#0" expanded="true" />
               </folding>
@@ -121,8 +136,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Writer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
-              <caret line="35" column="13" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
+            <state relative-caret-position="272">
+              <caret line="46" selection-start-line="46" selection-end-line="46" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -130,18 +145,16 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Bitmap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-591">
-              <caret line="11" column="85" lean-forward="true" selection-start-line="11" selection-start-column="85" selection-end-line="11" selection-end-column="85" />
+            <state relative-caret-position="174">
+              <caret line="110" column="24" selection-start-line="110" selection-start-column="24" selection-end-line="110" selection-end-column="24" />
               <folding>
-                <element signature="e#1025#1026#0" expanded="true" />
-                <element signature="e#1046#1047#0" expanded="true" />
-                <element signature="e#1106#1107#0" expanded="true" />
-                <element signature="e#1146#1147#0" expanded="true" />
-                <element signature="e#1181#1182#0" expanded="true" />
-                <element signature="e#1219#1220#0" expanded="true" />
+                <element signature="e#942#943#0" expanded="true" />
+                <element signature="e#972#973#0" expanded="true" />
+                <element signature="e#3487#3488#0" expanded="true" />
+                <element signature="e#3514#3515#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -190,13 +203,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Chunk.java" />
-        <option value="$PROJECT_DIR$/src/Writer.java" />
-        <option value="$PROJECT_DIR$/src/ConnectionReader.java" />
         <option value="$PROJECT_DIR$/src/ConnectionsManager.java" />
         <option value="$PROJECT_DIR$/src/Utils.java" />
-        <option value="$PROJECT_DIR$/src/IdcDm.java" />
+        <option value="$PROJECT_DIR$/src/Chunk.java" />
         <option value="$PROJECT_DIR$/src/Bitmap.java" />
+        <option value="$PROJECT_DIR$/src/IdcDm.java" />
+        <option value="$PROJECT_DIR$/src/Writer.java" />
+        <option value="$PROJECT_DIR$/src/ConnectionReader.java" />
       </list>
     </option>
   </component>
@@ -206,7 +219,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="1585" />
     <option name="width" value="1630" />
     <option name="height" value="1715" />
@@ -217,6 +230,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -234,13 +248,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1579805670084" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1579970652176" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -293,16 +306,19 @@
       <workItem from="1579628388299" duration="9667000" />
       <workItem from="1579705204241" duration="11316000" />
       <workItem from="1579796285341" duration="8475000" />
+      <workItem from="1579819398749" duration="357000" />
+      <workItem from="1579955544547" duration="14791000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="79061000" />
+    <option name="totallyTimeSpent" value="94209000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1293" height="693" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15060729" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15546559" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -311,7 +327,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3291815" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.40569395" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.39145908" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -378,8 +394,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ConnectionsManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="684">
-          <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
+        <state relative-caret-position="1598">
+          <caret line="96" selection-start-line="96" selection-end-line="96" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -388,8 +404,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="28" selection-end-column="5" />
+        <state relative-caret-position="-216">
+          <caret line="88" column="39" selection-start-line="88" selection-start-column="39" selection-end-line="88" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;method#diff#0;class#Utils#0" />
@@ -397,58 +413,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Writer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="35" column="13" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Chunk.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="56">
+          <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
           <folding>
+            <element signature="e#478#479#0" expanded="true" />
+            <element signature="e#511#512#0" expanded="true" />
+            <element signature="e#529#530#0" expanded="true" />
+            <element signature="e#560#561#0" expanded="true" />
             <element signature="e#474#475#0" expanded="true" />
             <element signature="e#531#532#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ConnectionReader.java">
+    <entry file="file://$PROJECT_DIR$/src/Bitmap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-748">
-          <caret line="24" column="42" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
+        <state relative-caret-position="174">
+          <caret line="110" column="24" selection-start-line="110" selection-start-column="24" selection-end-line="110" selection-end-column="24" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#942#943#0" expanded="true" />
+            <element signature="e#972#973#0" expanded="true" />
+            <element signature="e#3487#3488#0" expanded="true" />
+            <element signature="e#3514#3515#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/IdcDm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+        <state relative-caret-position="136">
+          <caret line="35" column="111" selection-start-line="35" selection-start-column="111" selection-end-line="35" selection-end-column="111" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bitmap.java">
+    <entry file="file://$PROJECT_DIR$/src/Writer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-591">
-          <caret line="11" column="85" lean-forward="true" selection-start-line="11" selection-start-column="85" selection-end-line="11" selection-end-column="85" />
+        <state relative-caret-position="272">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
           <folding>
-            <element signature="e#1025#1026#0" expanded="true" />
-            <element signature="e#1046#1047#0" expanded="true" />
-            <element signature="e#1106#1107#0" expanded="true" />
-            <element signature="e#1146#1147#0" expanded="true" />
-            <element signature="e#1181#1182#0" expanded="true" />
-            <element signature="e#1219#1220#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ConnectionReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="58" column="53" selection-start-line="58" selection-start-column="53" selection-end-line="58" selection-end-column="53" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

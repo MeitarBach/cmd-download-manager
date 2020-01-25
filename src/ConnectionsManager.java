@@ -21,8 +21,8 @@ public class ConnectionsManager {
         long reader_range_size = content_length % connections_number == 0 ?
                 content_length / connections_number : content_length / connections_number+1;
         // Make the range size divisible by CHUNK_SIZE
-        reader_range_size += ConnectionReader.getChunkSize() -
-                (reader_range_size % ConnectionReader.getChunkSize());
+        reader_range_size += Chunk.getChunkSize() -
+                (reader_range_size % Chunk.getChunkSize());
         long cur_range_start = 0;
         for(int i = 0 ; i < readers_pool.length ; i++){
             if (i != readers_pool.length - 1) // every thread except the last one
@@ -49,8 +49,8 @@ public class ConnectionsManager {
         long reader_range_size = content_length % connections_number == 0 ?
                 content_length / connections_number : content_length / connections_number+1;
         // Make the range size divisible by CHUNK_SIZE
-        reader_range_size += ConnectionReader.getChunkSize() -
-                (reader_range_size % ConnectionReader.getChunkSize());
+        reader_range_size += Chunk.getChunkSize() -
+                (reader_range_size % Chunk.getChunkSize());
         long cur_range_start = 0;
         for(int i = 0 ; i < readers_pool.length ; i++){
             // reset usedUrls only when all Urls are used in this round
