@@ -34,9 +34,6 @@ public class Tests {
 
         System.out.println(bitmap.serialize());
 
-        Runtime runtime = Runtime.getRuntime();
-        runtime.addShutdownHook(bitmap);
-
     }
 
 

@@ -8,10 +8,11 @@ public class ConnectionsManager {
 
     /**
      * A function which creates an array of desired number of ConnectionReader threads, assigning each of them
-     * except the last one a range of equal size to work on. The last thread gets the remaining bytes range.
-     * @param connections_number number of threads to create.
-     * @param content_length the size of the download file.
-     * @param bq a blocking queue to which the threads put chunks.
+     * except the last one a range of size divisible by CHUNK_SIZE to work on.
+     * The last thread gets the remaining bytes range.
+     * @param connections_number maximum number of threads to create.
+     * @param content_length the size of the file to download.
+     * @param bq a blocking queue into which the threads should put chunks.
      * @param urls an array of urls to get the file from
      * @return an array of ConnectionReader threads
      */
@@ -24,17 +25,20 @@ public class ConnectionsManager {
             connections_number--;
 
         ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
-        boolean[] usedUrls = new boolean[urls.length];
+        boolean[] usedUrls = new boolean[urls.length]; // for random assignment
 
-        // check if the file's size is evenly divisible for the desired amount of threads, and act accordingly
+        // check if the file's size is divisible by the desired amount of threads, act accordingly
         long reader_range_size = content_length % connections_number == 0 ?
-                content_length / connections_number : content_length / connections_number+1;
+                content_length / connections_number : content_length / connections_number + 1;
+
         // Make the range size divisible by CHUNK_SIZE
         reader_range_size += Chunk.getChunkSize() -
                 (reader_range_size % Chunk.getChunkSize());
+
+        // Split load between reader threads
         long cur_range_start = 0;
         for(int i = 0 ; i < readers_pool.length ; i++){
-            // reset usedUrls only when all Urls are used in this round
+            // reset usedUrls - only when all Urls were used in this round
             Utils.resetBooleanArr(usedUrls);
 
             // pick a random URL from the list which is not used in this round yet
@@ -58,25 +62,34 @@ public class ConnectionsManager {
         return readers_pool;
     }
 
-
+    /**
+     * ConnectionsManager constructor. Creates a new ConnectionsManager instance
+     * @param connections_number maximum number of threads to create
+     * @param content_length the size of the file to download.
+     * @param bq a blocking queue into which the threads should put chunks.
+     * @param urls an array of urls to get the file from
+     * @param bitmap a bitmap to assign to every thread in the pool
+     */
     public ConnectionsManager(int connections_number, long content_length,
                               BlockingQueue<Chunk> bq, URL[] urls, Bitmap bitmap){
         this.connection_readers = createConnectionReaders(connections_number, content_length, bq, urls, bitmap);
         this.readers_pool = Executors.newFixedThreadPool(connection_readers.length);
     }
 
+
+    /**
+     * A function which executes every ConnectionReader Thread in this ConnectionsManager
+     */
     public void execute(){
         for (ConnectionReader cr : connection_readers)
             this.readers_pool.execute(cr);
     }
 
+    /**
+     * @return this ConnectionManager's Readers Pool
+     */
     public ExecutorService getReaderPool(){
         return readers_pool;
     }
-
-    public int getNumOfThreads(){
-        return connection_readers.length;
-    }
-
 
 }

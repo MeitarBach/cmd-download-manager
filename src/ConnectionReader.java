@@ -7,17 +7,26 @@ import java.net.URL;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionReader implements Runnable {
-    private final int TIME_OUT = 30 * 1000; // Connect and read timeout is after 30 sec
+    private static final int TIME_OUT = 30 * 1000; // Connection and read Timeout - 30 sec
     private long range_start;
     private long range_size;
     private BlockingQueue<Chunk> blocking_queue;
     private URL download_url;
     private Bitmap bitmap;
 
+    /**
+     * ConnectionReader constructor. Creates a new ConnectionReader instance
+     * @param range_start
+     * @param range_size
+     * @param blocking_queue
+     * @param download_url
+     * @param bitmap
+     */
     public ConnectionReader(long range_start, long range_size, BlockingQueue<Chunk> blocking_queue,
                             URL download_url, Bitmap bitmap){
         this.bitmap = bitmap;
 
+        // Don't assign this reader chunks that were already downloaded and written to file
         boolean[] bitmap_arr = bitmap.getBitmapArray();
         int i = (int)(range_start / Chunk.getChunkSize());
         while(i < bitmap_arr.length && bitmap_arr[i++] && range_size > 0){
@@ -31,17 +40,23 @@ public class ConnectionReader implements Runnable {
         this.download_url = download_url;
     }
 
+    /**
+     * Download the range of bytes this reader was assigned to.
+     * Wrap Chunks of data and push them into a Blocking Queue.
+     */
     public void run(){
+        // Make sure that the range assigned is not already downloaded
         if (range_size == 0) {
             System.out.println("Reader " + threadId() + " was given a range that has already been downloaded");
             return;
         }
 
+
         System.out.println(threadId() + " Start downloading range (" + getRange() + ") " +
                 "from:\n" + download_url);
-        HttpURLConnection http_connection = null;
 
         // issue a range http get request for the resource specified in the url
+        HttpURLConnection http_connection = null;
         try {
             http_connection = (HttpURLConnection) download_url.openConnection();
             http_connection.setRequestMethod("GET");
@@ -77,7 +92,7 @@ public class ConnectionReader implements Runnable {
                         return;
                 }
 
-
+                // Try to read a Chunk of data from the stream
                 byte[] read_buffer = new byte[Chunk.getChunkSize()];
                 bytes_read = input_stream.read(read_buffer);
                 if (bytes_read == -1) break; // stop at end of stream
@@ -86,15 +101,16 @@ public class ConnectionReader implements Runnable {
                 // skip if it is the last chunk in the range
                 if (offset + bytes_read - 1 < lastByteInRange()) {
                     while (Chunk.getChunkSize() - bytes_read > 0) {
-                        bytes_read += input_stream.read(read_buffer, bytes_read, Chunk.getChunkSize() - bytes_read);
+                        bytes_read += input_stream.read(read_buffer, bytes_read,
+                                                        Chunk.getChunkSize() - bytes_read);
                     }
                 }
-                // create a chunk of size equal to the amount of bytes successfully read
-                // initialize the chunk's offset to be the offset in the file where this chunk starts
+
+                // create a chunk of size CHUNK_SIZE (unless it is the last chunk) and put it into the queue
                 Chunk data_chunk = new Chunk(read_buffer, bytes_read, offset);
                 blocking_queue.put(data_chunk);
-//                if (data_chunk.getSize() != Chunk.getChunkSize())
-//                    System.out.println(data_chunk);
+
+                // advance offset an check if this reader finished downloading it's range
                 offset += bytes_read;
                 if (offset > lastByteInRange())
                     System.out.println(threadId() + " Finished downloading");
@@ -111,18 +127,24 @@ public class ConnectionReader implements Runnable {
 
     }
 
-    public BlockingQueue<Chunk> getBlockingQueue(){
-        return this.blocking_queue;
-    }
-
+    /**
+     * @return id of current Thread
+     */
     private String threadId(){
         return "[" + Thread.currentThread().getId() + "]";
     }
 
+    /**
+     * @return range assigned to this reader
+     */
     public String getRange(){
         return (this.range_start + "-" + lastByteInRange());
     }
 
+
+    /**
+     * @return the last byte in the assigned range
+     */
     public long lastByteInRange(){
         return range_start+range_size - 1;
     }

@@ -1,13 +1,16 @@
 import java.io.*;
 
-public class Bitmap extends Thread implements Serializable{
+public class Bitmap implements Serializable{
     private boolean[] bitmap;
     private String file_name;
     private int chunks_wrote;
     private int percentage;
     private boolean finished;
 
-
+    /**
+     * Bitmap Constructor
+     * @param file_url a url string of a file to create a bitmap to
+     */
     public Bitmap(String file_url){
         long content_length = Utils.getContentLength(file_url);
         int chunks_number = (int) (content_length / Chunk.getChunkSize());
@@ -26,30 +29,58 @@ public class Bitmap extends Thread implements Serializable{
 
     }
 
+    /**
+     *
+     * @return a boolean array indicating which chunks had been written already
+     */
     public boolean[] getBitmapArray(){
         return this.bitmap;
     }
 
+    /**
+     *
+     * @return the name of the file this bitmap refers to
+     */
     public String getFileName (){
         return this.file_name;
     }
 
+    /**
+     *
+     * @return number of chunks this bitmap keeps track of
+     */
     public int getLength(){
         return this.bitmap.length;
     }
 
+    /**
+     *
+     * @return percentage of chunks already written to disk
+     */
     public int getPercentage(){
         return this.percentage;
     }
 
+    /**
+     *
+     * @return true if the entire file has been written to disk, false otherwise
+     */
     public boolean isFinished(){
         return this.finished;
     }
 
+    /**
+     * Percentage setter
+     * @param percentage the new percentage to set
+     */
     public void setPercentage(int percentage){
         this.percentage = percentage;
     }
 
+    /**
+     * A function which gets a chunk id and updates the bitmap to keep track of the chunks written
+     * @param chunk_id an id of a chunk written to disk
+     */
     public void update(int chunk_id){
         this.bitmap[chunk_id] = true;
         this.chunks_wrote++;
@@ -119,6 +150,9 @@ public class Bitmap extends Thread implements Serializable{
             return new Bitmap(file_url);
     }
 
+    /**
+     * A function which deletes the bitmap from disk
+     */
     public void delete(){
         File bitmap = new File(this.file_name);
         bitmap.delete();
@@ -134,8 +168,4 @@ public class Bitmap extends Thread implements Serializable{
         return str.toString();
     }
 
-    @Override
-    public void run() {
-        serialize();
-    }
 }

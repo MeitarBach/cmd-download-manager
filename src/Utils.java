@@ -23,21 +23,9 @@ public class Utils {
         }
 
         String[] file_path = url.getFile().split("/");
-        String file_name = file_path[file_path.length-1];
+        String file_name = file_path[file_path.length - 1];
 
         return file_name;
-    }
-
-    /**
-     * A function which gets a file and returns its extension
-     * @param file A file to get extension of
-     * @return The file's extension
-     */
-    public static String getFileExtension(String file){
-        String[] file_path = file.split("\\.");
-        String file_extension = file_path[file_path.length-1];
-
-        return file_extension;
     }
 
     /**
@@ -54,8 +42,8 @@ public class Utils {
             connection =  (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("HEAD");
             connection.connect();
-            int i = 0;
 
+            int i = 0;
             while(true){ // it is known that Content-Length must be a header
                 String header = connection.getHeaderFieldKey(i);
                 if (header != null) {
@@ -110,18 +98,32 @@ public class Utils {
         return urls.toArray(result);
     }
 
+    /**
+     * A generic array elements printer
+     * @param arr
+     * @param <E>
+     */
     public static <E> void printArr(E[] arr){
         for (E e : arr){
             System.out.println(e);
         }
     }
 
+    /**
+     * A boolean array elements printer
+     * @param arr
+     */
     public static void printArr(boolean[] arr){
         for (boolean b : arr){
             System.out.println(b);
         }
     }
 
+    /**
+     * A function which gets a boolean array and resets its cells to false if necessary.
+     * The function resets the array if and only if all of its elements are true!
+     * @param arr boolean array to reset
+     */
     public static void resetBooleanArr(boolean[] arr){
         for(boolean b : arr)
             if(!b) return; // no need to reset
@@ -129,9 +131,6 @@ public class Utils {
             arr[i] = false;
 
     }
-
-
-
 
     /**
      * A function for checking differences between 2 files
@@ -163,10 +162,10 @@ public class Utils {
             System.out.println(i+1 + " Bytes were compared");
             System.out.println(diff);
             if (count == 0){
-                System.out.println("Wooooooh");
+                System.out.println("Wooooooh, The files are identical");
             }
         } catch (IOException e){
-            System.out.println(e);
+            System.err.println(e);
         }
     }
 
