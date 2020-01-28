@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionReader implements Runnable {
+    private final int TIME_OUT = 30 * 1000; // Request timeout is after 30 sec
     private long range_start;
     private long range_size;
     private BlockingQueue<Chunk> blocking_queue;
@@ -28,7 +29,10 @@ public class ConnectionReader implements Runnable {
         // issue a range http get request for the resource specified in the url
         try {
             http_connection = (HttpURLConnection) download_url.openConnection();
+            http_connection.setRequestMethod("GET");
             http_connection.setRequestProperty("Range", "Bytes=" + range_start + "-" + lastByteInRange());
+            http_connection.setConnectTimeout(TIME_OUT);
+            http_connection.setReadTimeout(TIME_OUT);
             http_connection.connect();
         } catch (IOException e) {
             System.err.println("There was a problem while opening a connection to the url: " + e);
@@ -78,6 +82,8 @@ public class ConnectionReader implements Runnable {
 //                if (data_chunk.getSize() != Chunk.getChunkSize())
 //                    System.out.println(data_chunk);
                 offset += bytes_read;
+                if (offset > lastByteInRange())
+                    System.out.println("Finished downloading");
             }
         } catch (IOException e){
             System.err.println("There was a problem while reading the data: " + e);
@@ -85,7 +91,6 @@ public class ConnectionReader implements Runnable {
             System.err.println("There was a problem while writing a chunk into the queue: " + e);
         }
 
-        System.out.println("Finished downloading");
     }
 
     public BlockingQueue<Chunk> getBlockingQueue(){

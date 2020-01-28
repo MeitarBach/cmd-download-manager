@@ -1,10 +1,11 @@
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class IdcDm {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
 
         /******  TESTS  ******/
 
@@ -18,7 +19,7 @@ public class IdcDm {
         // Main Program Logic
         if(args.length > 2 || args.length < 1){
             System.out.println("usage:\n\t\tjava IdcDm URL|URL-LIST-FILE [MAX-CONCURRENT-CONNECTIONS]");
-            return;
+            System.exit(-1);
         }
 
 
@@ -34,22 +35,36 @@ public class IdcDm {
         ConnectionsManager readers_pool =
                 new ConnectionsManager(connections_number, content_length, bq, urls, bitmap);
 
+//        System.out.println("The number of created readers is: " + readers_pool.getNumOfThreads());
+
         readers_pool.execute();
-        readers_pool.getReaderPool().shutdown();
 
         String file_name = Utils.getFileName(urls[0].toString());
         System.out.println("\nDownloading: " + file_name);
 
-        File output_file = new File(file_name);
-        output_file.createNewFile();
+        File output_file = null;
+        try {
+            output_file = new File(file_name);
+            output_file.createNewFile();
+        } catch (IOException e){
+            System.err.println("Couldn't create/open output file on disk: " + e);
+        }
+
+        if (output_file == null)
+            System.exit(-1);
 
         Thread writer_worker = new Thread(new Writer(bq, output_file, bitmap));
         writer_worker.start();
 
-        readers_pool.getReaderPool().awaitTermination(30, TimeUnit.SECONDS);
-        writer_worker.join();
+        try {
+            readers_pool.getReaderPool().shutdown();
+//            readers_pool.getReaderPool().awaitTermination(30, TimeUnit.SECONDS);
+            writer_worker.join();
+        }catch (InterruptedException e){
+            System.err.println("Shutdown sequence was interrupted: " + e);
+        }
 
-        bitmap.deleteBitmap();
+        bitmap.delete();
 
     }
 

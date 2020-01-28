@@ -2,6 +2,7 @@ import java.net.URL;
 import java.util.concurrent.*;
 
 public class ConnectionsManager {
+    private final int MIN_RANGE = 1024 * 1000 * 4; // Minimal range to assign for a reader - 4MB
     private ExecutorService readers_pool;
     private ConnectionReader[] connection_readers;
 
@@ -17,9 +18,10 @@ public class ConnectionsManager {
     public ConnectionReader[] createConnectionReaders(int connections_number, long content_length,
                                                              BlockingQueue<Chunk> bq, URL[] urls, Bitmap bitmap){
 
-        // limit the number of connections to 3 * (available number of servers)
-        // This makes sure that each server opens a maximum of 3 connections
-        connections_number = connections_number < (3 * urls.length) ? connections_number : (3 * urls.length);
+        // limit the number of connections
+        // This makes sure that each connection reader gets at least MIN_RANGE bytes to download
+        while(content_length / connections_number < MIN_RANGE)
+            connections_number--;
 
         ConnectionReader[] readers_pool = new ConnectionReader[connections_number];
         boolean[] usedUrls = new boolean[urls.length];
@@ -71,5 +73,10 @@ public class ConnectionsManager {
     public ExecutorService getReaderPool(){
         return readers_pool;
     }
+
+    public int getNumOfThreads(){
+        return connection_readers.length;
+    }
+
 
 }

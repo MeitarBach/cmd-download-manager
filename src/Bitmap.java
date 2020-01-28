@@ -119,7 +119,7 @@ public class Bitmap extends Thread implements Serializable{
             return new Bitmap(file_url);
     }
 
-    public void deleteBitmap(){
+    public void delete(){
         File bitmap = new File(this.file_name);
         bitmap.delete();
     }
