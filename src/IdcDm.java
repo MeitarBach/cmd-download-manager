@@ -2,21 +2,21 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class IdcDm {
     public static void main(String[] args) {
 
         /******  TESTS  ******/
 
-//        getUrlsTest();
-//        booleanResetTest();
-//        testBitmapCreation("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
-//        testBitmapSetPercentage("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
-//        testBitmapDesirialization("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+//        Tests.getUrlsTest();
+//        Tests.booleanResetTest();
+//        Tests.testBitmapCreation("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+//        Tests.testBitmapSetPercentage("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
+//        Tests.testBitmapDesirialization("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
 
 
-        // Main Program Logic
+        /******   Main Program Logic   ******/
+
         if(args.length > 2 || args.length < 1){
             System.out.println("usage:\n\t\tjava IdcDm URL|URL-LIST-FILE [MAX-CONCURRENT-CONNECTIONS]");
             System.exit(-1);
@@ -64,63 +64,15 @@ public class IdcDm {
             System.err.println("Shutdown sequence was interrupted: " + e);
         }
 
-        bitmap.delete();
 
+        if (bitmap.isFinished()){
+            System.out.println("Download succeeded");
+            bitmap.delete();
+        }
+        else{
+            System.out.println("Download failed");
+            System.exit(-1);
+        }
     }
-
-
-
-
-
-    // resetBooleanArr test
-    public static void booleanResetTest(){
-        boolean[] arr = {true, true, false};
-        System.out.println("Before first reset:");
-        Utils.printArr(arr);
-
-        Utils.resetBooleanArr(arr);
-        System.out.println("after first reset:");
-        Utils.printArr(arr);
-
-        arr[2] = true;
-        Utils.resetBooleanArr(arr);
-        System.out.println("after second reset:");
-        Utils.printArr(arr);
-    }
-
-    // getUrls test
-    public static void getUrlsTest() {
-        URL[] urls = Utils.getUrls("test\\CentOS-6.10-x86_64-netinstall.iso.list");
-        Utils.printArr(urls);
-        urls = Utils.getUrls("https://ia800303.us.archive.org/19/items/Mario1_500/Mario1_500.avi");
-        System.out.println();
-        Utils.printArr(urls);
-    }
-
-    // Bitmap creation and serialization test
-    public static void testBitmapCreation(String file_url){
-        Bitmap bitmap = Bitmap.getBitmap(file_url);
-        System.out.println("The bitmap before we update:\n" + bitmap + "\n");
-
-        System.out.println(bitmap.serialize());
-
-        Runtime runtime = Runtime.getRuntime();
-        runtime.addShutdownHook(bitmap);
-
-    }
-
-
-    public static void testBitmapSetPercentage(String file_url){
-        Bitmap bitmap = Bitmap.getBitmap(file_url);
-        bitmap.setPercentage(25);
-        bitmap.serialize();
-        System.out.println("We updated the bitmap");
-    }
-
-    public static void testBitmapDesirialization(String file_url){
-        Bitmap bitmap = Bitmap.getBitmap(file_url);
-        System.out.println("The bitmap after we update:\n" + bitmap);
-    }
-
 
 }

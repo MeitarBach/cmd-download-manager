@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class Writer implements Runnable{
-    private final long TIME_OUT = 2; // Maximum waiting time in minutes for a chunk to become available in the queue
+    private final long TIME_OUT = 1; // Maximum waiting time in minutes for a chunk to become available in the queue
     private BlockingQueue<Chunk> blocking_queue;
     private File output_file;
     private Bitmap bitmap;
@@ -46,7 +46,6 @@ public class Writer implements Runnable{
                     if(bitmap.serialize()){
                         System.out.println("Downloaded " + bitmap.getPercentage() + "%");
                         if(bitmap.isFinished()) { // download is finished - don't wait for more chunks
-                            System.out.println("Download succeeded");
                             break;
                         }
                     }

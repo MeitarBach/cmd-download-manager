@@ -1,5 +1,5 @@
 public class Chunk {
-    private static final int CHUNK_SIZE = 4096; // Maximum size of a chunk
+    private static final int CHUNK_SIZE = 8192; // Maximum size of a chunk 8KB
     private byte[] data;
     private int size;
     private long offset; // where in the file this chunk starts

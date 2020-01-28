@@ -2,7 +2,7 @@ import java.net.URL;
 import java.util.concurrent.*;
 
 public class ConnectionsManager {
-    private final int MIN_RANGE = 1024 * 1000 * 4; // Minimal range to assign for a reader - 4MB
+    private final int MIN_RANGE = 1024 * 1000 * 4; // Minimal range to assign for a reader - 4MB (a range below that is too small)
     private ExecutorService readers_pool;
     private ConnectionReader[] connection_readers;
 
